@@ -1,90 +1,142 @@
 # GLMAEDr
 
-An R interface to the [General Lake Model (GLM)](https://github.com/AquaticEcoDynamics/GLM)
-coupled with the Aquatic EcoDynamics (AED) library. GLM is compiled from
-source on first use, producing a native binary with no code-signing
-restrictions. Supports macOS, Ubuntu Linux, and Windows.
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/FLARE-forecast/GLMAEDr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/FLARE-forecast/GLMAEDr/actions/workflows/R-CMD-check.yaml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+<!-- badges: end -->
+
+GLMAEDr is an R package for running the
+[General Lake Model (GLM)](https://github.com/AquaticEcoDynamics/GLM) coupled
+with the [Aquatic EcoDynamics (AED)](https://github.com/AquaticEcoDynamics/libaed-water)
+library. Rather than bundling pre-compiled executables, GLMAEDr compiles GLM
+from source on your machine — avoiding code-signing restrictions on macOS and
+producing a binary that is tuned for your system.
 
 ## System requirements
 
-Install these before calling `glm_install()`.
+Install these **before** calling `glm_install()`.
 
-**macOS** (via [Homebrew](https://brew.sh)):
-```bash
-brew install gcc netcdf
+| Platform | Command |
+|---|---|
+| **macOS** ([Homebrew](https://brew.sh)) | `brew install gcc netcdf` |
+| **Ubuntu / Debian** | `sudo apt-get install gfortran libnetcdf-dev` |
+| **Windows** | Install [RTools](https://cran.r-project.org/bin/windows/Rtools/) for your R version |
+
+To check whether all build dependencies are present:
+
+```r
+GLMAEDr::check_build_tools()
 ```
-
-**Ubuntu / Debian**:
-```bash
-sudo apt-get install gfortran libnetcdf-dev
-```
-
-**Windows**: install [RTools](https://cran.r-project.org/bin/windows/Rtools/)
-for your R version — it provides `gfortran`, `make`, and NetCDF libraries.
 
 ## Installation
+
+Install the package from GitHub with pak:
 
 ```r
 # install.packages("pak")
 pak::pkg_install("FLARE-forecast/GLMAEDr")
 ```
 
-## First-time setup
+## Getting started
 
-After installing the package, compile GLM once:
+### Step 1 — compile GLM
+
+Run this once after installing the package. It clones the GLM-AED source
+repository and compiles the binary (~2 minutes):
 
 ```r
 library(GLMAEDr)
-glm_install()   # downloads source and compiles (~2 min)
+glm_install()
 ```
 
 The binary is stored in a per-user data directory
-(`tools::R_user_dir("GLMAEDr", "data")`), survives package upgrades, and
+(`tools::R_user_dir("GLMAEDr", "data")`), so it survives package upgrades and
 requires no administrator privileges.
 
-## Usage
+Confirm the installation succeeded:
 
 ```r
-library(GLMAEDr)
+glm_is_installed()   # TRUE
+glm_version()        # prints the GLM version string
+```
 
-# Verify the installed version
-glm_version()
+### Step 2 — set up a simulation
 
-# Run a simulation (sim_folder must contain a glm3.nml file)
-run_glm("path/to/my/simulation")
+Each simulation lives in its own folder and must contain a `glm3.nml`
+configuration file. Copy the bundled template as a starting point:
 
-# Copy the bundled NML template as a starting point
-file.copy(nml_template_path(), "my_simulation/glm3.nml")
+```r
+dir.create("my_lake")
+file.copy(nml_template_path(), "my_lake/glm3.nml")
+```
 
-# Check whether GLM is compiled and ready
-glm_is_installed()
+Edit `glm3.nml` to configure your lake geometry, meteorological inputs, and
+output settings.
 
-# Show where the binary lives
-glm_exe_path()
+### Step 3 — run the simulation
+
+```r
+run_glm("my_lake")
+```
+
+GLM writes its output to `my_lake/output/output.nc` by default. Verbose output
+is printed to the console; pass `verbose = FALSE` to suppress it.
+
+## Installing from AED_Tools
+
+If you need the v4 development branch or have access to the private AED_Tools
+repository, use `glm_install_aed_tools()` instead:
+
+```r
+# Public AED_Tools repo, v4alpha branch
+glm_install_aed_tools(ref = "v4alpha")
+
+# Private AED_Tools_Private repo (requires GitHub credentials)
+glm_install_aed_tools(private = TRUE, ref = "v4alpha")
+```
+
+## Registering a pre-built binary
+
+If you already have a GLM executable (e.g. built manually or received from a
+colleague), register it directly without compiling from source:
+
+```r
+glm_register_binary("~/Downloads/glm")
 ```
 
 ## Upgrading GLM
 
-When new GLM source is available, reinstall with:
+Recompile with the latest source at any time:
 
 ```r
 glm_install(force = TRUE)
 ```
 
-To pin a specific release tag:
+Pin a specific tag or branch:
 
 ```r
 glm_install(ref = "v3.9.107", force = TRUE)
 ```
 
-## Troubleshooting
+## Using GLM outside R
 
-`check_build_tools()` reports which build dependencies are missing with
-platform-specific installation instructions:
+`glm_path()` returns the full path to the binary, useful for calling GLM from
+a shell script or other tool:
 
 ```r
-check_build_tools()
+glm_path()
+#> /Users/you/Library/Application Support/R/GLMAEDr/glm
 ```
+
+## Troubleshooting
+
+| Problem | Fix |
+|---|---|
+| `Missing build tools` error | Run `check_build_tools()` for platform-specific install instructions |
+| Build fails on macOS | Ensure Homebrew `gcc` is on your PATH: `echo $PATH` |
+| Build fails on Linux | Check that `libnetcdf-dev` is installed: `dpkg -l libnetcdf-dev` |
+| `GLM is not installed` when calling `run_glm()` | Run `glm_install()` first |
+| Want to try a different GLM version | `glm_install(ref = "v3.9.107", force = TRUE)` |
 
 ## License
 
