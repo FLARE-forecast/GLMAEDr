@@ -341,6 +341,15 @@ check_build_tools <- function() {
     ))
   }
 
+  # git clone does not guarantee execute bits on shell scripts; set them
+  # explicitly so build_glm.sh and any scripts it calls can run.
+  if (.Platform$OS.type == "unix") {
+    sh_files <- list.files(
+      build_dir, pattern = "\\.sh$", recursive = TRUE, full.names = TRUE
+    )
+    Sys.chmod(sh_files, "755")
+  }
+
   sh_cmd  <- Sys.which("sh")
   if (!nzchar(sh_cmd)) sh_cmd <- "sh"
 
@@ -542,6 +551,13 @@ glm_install_aed_tools <- function(
       "build_glm.sh not found at {.file {build_sh}}.",
       "i" = "The repository structure may have changed."
     ))
+  }
+
+  if (.Platform$OS.type == "unix") {
+    sh_files <- list.files(
+      build_dir, pattern = "\\.sh$", recursive = TRUE, full.names = TRUE
+    )
+    Sys.chmod(sh_files, "755")
   }
 
   sh_cmd <- Sys.which("sh")
