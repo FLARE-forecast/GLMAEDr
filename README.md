@@ -8,7 +8,7 @@
 GLMAEDr is an R package for running the
 [General Lake Model (GLM)](https://github.com/AquaticEcoDynamics/GLM) coupled
 with the [Aquatic EcoDynamics (AED)](https://github.com/AquaticEcoDynamics/libaed-water)
-library. Rather than bundling pre-compiled executables, GLMAEDr compiles GLM
+library. Rather than bundling pre-compiled executables (like GLM3r), GLMAEDr compiles GLM
 from source on your machine — avoiding code-signing restrictions on macOS and
 producing a binary that is tuned for your system.
 
