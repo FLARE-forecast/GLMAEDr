@@ -229,10 +229,12 @@ check_build_tools <- function() {
     if (!found) missing_tools <- c(missing_tools, cmd)
   }
 
-  # NetCDF: check via nc-config or netcdf-config
-  has_netcdf <- nzchar(Sys.which("nc-config")) ||
-                nzchar(Sys.which("netcdf-config"))
-  if (!has_netcdf) missing_tools <- c(missing_tools, "netcdf headers")
+  # NetCDF: Unix uses nc-config/netcdf-config; Windows bundles it with RTools
+  if (.Platform$OS.type != "windows") {
+    has_netcdf <- nzchar(Sys.which("nc-config")) ||
+                  nzchar(Sys.which("netcdf-config"))
+    if (!has_netcdf) missing_tools <- c(missing_tools, "netcdf headers")
+  }
 
   if (length(missing_tools) == 0L) return(invisible(TRUE))
 
