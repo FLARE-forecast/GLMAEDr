@@ -43,7 +43,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y gfortran libnetcdf-dev
+          sudo apt-get install -y gfortran libnetcdf-dev debhelper
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:

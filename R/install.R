@@ -1,4 +1,4 @@
-GLM_DEFAULT_REPO      <- "https://github.com/rqthomas/glm-aed"
+glm_default_repo      <- "https://github.com/rqthomas/glm-aed"
 aed_tools_default_repo <- "https://github.com/AquaticEcoDynamics/AED_Tools"
 aed_tools_private_default_repo <-
   "https://github.com/AquaticEcoDynamics/AED_Tools_Private"
@@ -20,7 +20,7 @@ aed_tools_private_default_repo <-
 #'
 #' **Linux (Ubuntu/Debian)** — install via apt:
 #' ```
-#' sudo apt-get install gfortran libnetcdf-dev
+#' sudo apt-get install gfortran libnetcdf-dev debhelper
 #' ```
 #'
 #' **Windows** — install
@@ -53,7 +53,7 @@ aed_tools_private_default_repo <-
 #'
 #' @export
 glm_install <- function(
-  repo    = GLM_DEFAULT_REPO,
+  repo    = glm_default_repo,
   ref     = "HEAD",
   no_gui  = TRUE,
   jobs    = 1L,
@@ -232,8 +232,15 @@ check_build_tools <- function() {
   # NetCDF: Unix uses nc-config/netcdf-config; Windows bundles it with RTools
   if (.Platform$OS.type != "windows") {
     has_netcdf <- nzchar(Sys.which("nc-config")) ||
-                  nzchar(Sys.which("netcdf-config"))
+      nzchar(Sys.which("netcdf-config"))
     if (!has_netcdf) missing_tools <- c(missing_tools, "netcdf headers")
+  }
+
+  # debhelper: required on Linux because the GLM build script packages a .deb
+  if (Sys.info()[["sysname"]] == "Linux") {
+    if (!nzchar(Sys.which("dh_testdir"))) {
+      missing_tools <- c(missing_tools, "debhelper")
+    }
   }
 
   if (length(missing_tools) == 0L) return(invisible(TRUE))
@@ -248,7 +255,7 @@ check_build_tools <- function() {
   } else if (startsWith(platform, "ubuntu-")) {
     install_hint <- c(
       "i" = "Install via apt:",
-      " " = "{.code sudo apt-get install gfortran libnetcdf-dev}"
+      " " = "{.code sudo apt-get install gfortran libnetcdf-dev debhelper}"
     )
   } else if (platform == "windows") {
     install_hint <- c(
@@ -303,7 +310,10 @@ check_build_tools <- function() {
     cli::cli_abort(c(
       "Failed to clone {.url {repo}}.",
       "x" = if (nzchar(trimws(result$stderr))) result$stderr else result$stdout,
-      "i" = "Check your internet connection and that the repository URL is correct."
+      "i" = paste0(
+        "Check your internet connection and that the",
+        " repository URL is correct."
+      )
     ))
   }
 
@@ -371,8 +381,8 @@ check_build_tools <- function() {
       "x" = if (nzchar(trimws(result$stderr))) result$stderr else result$stdout,
       "i" = "Ensure all build dependencies are installed.",
       "i" = paste0(
-        "See {.url https://github.com/FLARE-forecast/GLMAEDr#system-requirements}",
-        " for details."
+        "See {.url https://github.com/FLARE-forecast/GLMAEDr",
+        "#system-requirements} for details."
       )
     ))
   }
@@ -487,7 +497,10 @@ glm_install_aed_tools <- function(
     cli::cli_abort(c(
       "Failed to clone {.url {repo}}.",
       "x" = if (nzchar(trimws(result$stderr))) result$stderr else result$stdout,
-      "i" = "Check your internet connection and that the repository URL is correct."
+      "i" = paste0(
+        "Check your internet connection and that the",
+        " repository URL is correct."
+      )
     ))
   }
 }
