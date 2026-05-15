@@ -15,9 +15,7 @@ URL: https://flare-forecast.github.io/GLMAEDr,
 BugReports: https://github.com/FLARE-forecast/GLMAEDr/issues
 Imports:
     cli,
-    parallel,
     processx,
-    rlang,
     tools
 Suggests:
     testthat (>= 3.0.0)

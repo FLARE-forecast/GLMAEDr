@@ -13,17 +13,17 @@ aed_tools_private_default_repo <-
 #'
 #' ## System requirements
 #'
-#' **macOS** — install via Homebrew:
+#' **macOS** -- install via Homebrew:
 #' ```
 #' brew install gcc netcdf
 #' ```
 #'
-#' **Linux (Ubuntu/Debian)** — install via apt:
+#' **Linux (Ubuntu/Debian)** -- install via apt:
 #' ```
-#' sudo apt-get install gfortran libnetcdf-dev debhelper
+#' sudo apt-get install gfortran libnetcdf-dev libgd-dev debhelper
 #' ```
 #'
-#' **Windows** — install
+#' **Windows** -- install
 #' [RTools](https://cran.r-project.org/bin/windows/Rtools/) for your R
 #' version (provides `gfortran`, `make`, and NetCDF libraries).
 #'
@@ -31,7 +31,7 @@ aed_tools_private_default_repo <-
 #'   are supported as long as they preserve the `glm-source/build_glm.sh`
 #'   structure.
 #' @param ref What to check out after cloning. Accepts:
-#'   * `"HEAD"` (default) — tip of the default branch
+#'   * `"HEAD"` (default) -- tip of the default branch
 #'   * a branch name, e.g. `"develop"`
 #'   * a tag, e.g. `"v3.9.107"`
 #'   * a full or abbreviated commit SHA, e.g. `"a3f2c1d"`
@@ -131,7 +131,7 @@ glm_exe_path <- function() {
 #' Use this when you want to invoke GLM directly from a shell or external
 #' script rather than through `run_glm()`.
 #'
-#' @return Character string — the absolute path to the GLM executable.
+#' @return Character string -- the absolute path to the GLM executable.
 #' @export
 #' @examples
 #' \dontrun{
@@ -236,6 +236,16 @@ check_build_tools <- function() {
     if (!has_netcdf) missing_tools <- c(missing_tools, "netcdf headers")
   }
 
+  # GD graphics library: needed for GLM output plots even with --no-gui.
+  # Windows bundles it with RTools; Unix needs it installed separately.
+  if (.Platform$OS.type != "windows") {
+    has_gd <- nzchar(Sys.which("gdlib-config")) ||
+      nzchar(Sys.which("pkg-config")) &&
+        system2("pkg-config", "--exists gdlib",
+                stdout = FALSE, stderr = FALSE) == 0L
+    if (!has_gd) missing_tools <- c(missing_tools, "libgd")
+  }
+
   # debhelper: required on Linux because the GLM build script packages a .deb
   if (Sys.info()[["sysname"]] == "Linux") {
     if (!nzchar(Sys.which("dh_testdir"))) {
@@ -250,12 +260,15 @@ check_build_tools <- function() {
   if (startsWith(platform, "macos-")) {
     install_hint <- c(
       "i" = "Install via Homebrew:",
-      " " = "{.code brew install gcc netcdf}"
+      " " = "{.code brew install gcc netcdf gd}"
     )
   } else if (startsWith(platform, "ubuntu-")) {
     install_hint <- c(
       "i" = "Install via apt:",
-      " " = "{.code sudo apt-get install gfortran libnetcdf-dev debhelper}"
+      " " = paste0(
+        "{.code sudo apt-get install",
+        " gfortran libnetcdf-dev libgd-dev debhelper}"
+      )
     )
   } else if (platform == "windows") {
     install_hint <- c(
@@ -340,7 +353,7 @@ check_build_tools <- function() {
 
 .build_glm <- function(build_dir, no_gui, jobs, quiet) {
   cli::cli_progress_step(
-    "Building GLM (this may take a few minutes…)"
+    "Building GLM (this may take a few minutes...)"
   )
 
   src_dir   <- file.path(build_dir, "glm-source")
@@ -400,13 +413,13 @@ check_build_tools <- function() {
 #'
 #' ## System requirements
 #'
-#' Same as `glm_install()` — see `?glm_install` for details.
+#' Same as `glm_install()` -- see `?glm_install` for details.
 #'
 #' @param repo URL of the AED_Tools git repository. Ignored when `private =
 #'   TRUE`.
 #' @param ref Branch or tag to check out inside the `GLM/` sub-repository
 #'   after fetching sources. Accepts:
-#'   * `"HEAD"` (default) — whatever branch `fetch_sources.sh` leaves checked
+#'   * `"HEAD"` (default) -- whatever branch `fetch_sources.sh` leaves checked
 #'     out
 #'   * a branch name, e.g. `"v4alpha"`
 #'   * a tag, e.g. `"v4.0.0"`
@@ -556,7 +569,7 @@ glm_install_aed_tools <- function(
 }
 
 .build_glm_aed_tools <- function(build_dir, no_gui, quiet) {
-  cli::cli_progress_step("Building GLM (this may take a few minutes…)")
+  cli::cli_progress_step("Building GLM (this may take a few minutes...)")
 
   clean_sh <- file.path(build_dir, "clean.sh")
   build_sh <- file.path(build_dir, "build_glm.sh")

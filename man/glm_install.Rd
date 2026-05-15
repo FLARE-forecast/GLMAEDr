@@ -5,7 +5,7 @@
 \title{Install the GLM executable by compiling from source}
 \usage{
 glm_install(
-  repo = GLM_DEFAULT_REPO,
+  repo = glm_default_repo,
   ref = "HEAD",
   no_gui = TRUE,
   jobs = 1L,
@@ -20,7 +20,7 @@ structure.}
 
 \item{ref}{What to check out after cloning. Accepts:
 \itemize{
-\item \code{"HEAD"} (default) — tip of the default branch
+\item \code{"HEAD"} (default) -- tip of the default branch
 \item a branch name, e.g. \code{"develop"}
 \item a tag, e.g. \code{"v3.9.107"}
 \item a full or abbreviated commit SHA, e.g. \code{"a3f2c1d"}
@@ -51,17 +51,17 @@ a GLM version upgrade).
 \details{
 \subsection{System requirements}{
 
-\strong{macOS} — install via Homebrew:
+\strong{macOS} -- install via Homebrew:
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{brew install gcc netcdf
 }\if{html}{\out{</div>}}
 
-\strong{Linux (Ubuntu/Debian)} — install via apt:
+\strong{Linux (Ubuntu/Debian)} -- install via apt:
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{sudo apt-get install gfortran libnetcdf-dev
+\if{html}{\out{<div class="sourceCode">}}\preformatted{sudo apt-get install gfortran libnetcdf-dev debhelper
 }\if{html}{\out{</div>}}
 
-\strong{Windows} — install
+\strong{Windows} -- install
 \href{https://cran.r-project.org/bin/windows/Rtools/}{RTools} for your R
 version (provides \code{gfortran}, \code{make}, and NetCDF libraries).
 }

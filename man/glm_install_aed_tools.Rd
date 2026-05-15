@@ -20,7 +20,7 @@ glm_install_aed_tools(
 \item{ref}{Branch or tag to check out inside the \verb{GLM/} sub-repository
 after fetching sources. Accepts:
 \itemize{
-\item \code{"HEAD"} (default) — whatever branch \code{fetch_sources.sh} leaves checked
+\item \code{"HEAD"} (default) -- whatever branch \code{fetch_sources.sh} leaves checked
 out
 \item a branch name, e.g. \code{"v4alpha"}
 \item a tag, e.g. \code{"v4.0.0"}
@@ -54,7 +54,7 @@ the same per-user data directory as \code{glm_install()}.
 \details{
 \subsection{System requirements}{
 
-Same as \code{glm_install()} — see \code{?glm_install} for details.
+Same as \code{glm_install()} -- see \code{?glm_install} for details.
 }
 }
 \examples{

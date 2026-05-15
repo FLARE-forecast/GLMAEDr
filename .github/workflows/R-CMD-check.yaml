@@ -37,13 +37,18 @@ jobs:
 
       - name: Install macOS build dependencies
         if: runner.os == 'macOS'
-        run: brew install gcc netcdf
+        run: brew install gcc netcdf gd
 
       - name: Install Linux build dependencies
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y gfortran libnetcdf-dev debhelper
+          sudo apt-get install -y gfortran libnetcdf-dev libgd-dev debhelper
+
+      - name: Install Windows build dependencies
+        if: runner.os == 'Windows'
+        run: pacman -S --noconfirm mingw-w64-ucrt-x86_64-gd
+        shell: C:\rtools44\usr\bin\bash.exe -l {0}
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:

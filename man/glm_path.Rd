@@ -7,7 +7,7 @@
 glm_path()
 }
 \value{
-Character string — the absolute path to the GLM executable.
+Character string -- the absolute path to the GLM executable.
 }
 \description{
 Returns the absolute path to the compiled GLM binary, verified to exist.
