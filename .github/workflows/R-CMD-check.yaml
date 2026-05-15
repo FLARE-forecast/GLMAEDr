@@ -48,7 +48,7 @@ jobs:
       - name: Install Windows build dependencies
         if: runner.os == 'Windows'
         run: pacman -S --noconfirm mingw-w64-ucrt-x86_64-gd
-        shell: C:\rtools44\usr\bin\bash.exe -l {0}
+        shell: bash
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
