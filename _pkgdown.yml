@@ -1,0 +1,51 @@
+url: https://flare-forecast.github.io/GLMAEDr
+
+template:
+  bootstrap: 5
+  bootswatch: flatly
+
+home:
+  title: GLMAEDr — Run GLM-AED from R
+  description: >
+    Compile and run the General Lake Model (GLM) coupled with the Aquatic
+    EcoDynamics (AED) library, directly from R.
+
+navbar:
+  structure:
+    left:  [intro, reference, news]
+    right: [search, github]
+  components:
+    github:
+      icon: fab fa-github fa-lg
+      href: https://github.com/FLARE-forecast/GLMAEDr
+      aria-label: GitHub repository
+
+reference:
+  - title: Install GLM
+    desc: >
+      Functions for compiling and installing the GLM executable.
+      Run one of these once before using `run_glm()`.
+    contents:
+      - glm_install
+      - glm_install_aed_tools
+      - glm_register_binary
+      - check_build_tools
+
+  - title: Run simulations
+    desc: Functions for executing GLM simulations from R.
+    contents:
+      - run_glm
+      - glm_version
+
+  - title: Paths and status
+    desc: Inspect and locate the installed GLM binary.
+    contents:
+      - glm_exe_path
+      - glm_path
+      - glm_is_installed
+      - nml_template_path
+
+news:
+  releases:
+    - text: "GLMAEDr 0.2.0"
+      href: https://github.com/FLARE-forecast/GLMAEDr/releases/tag/v0.2.0
