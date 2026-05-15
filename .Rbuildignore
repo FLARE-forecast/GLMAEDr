@@ -2,3 +2,5 @@
 ^scripts$
 ^LICENSE\.md$
 ^README\.md$
+^_pkgdown\.yml$
+^docs$
