@@ -13,7 +13,7 @@ glm_path()
 
 ## Value
 
-Character string — the absolute path to the GLM executable.
+Character string – the absolute path to the GLM executable.
 
 ## Examples
 

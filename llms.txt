@@ -15,8 +15,8 @@ Install these **before** calling
 
 | Platform | Command |
 |----|----|
-| **macOS** ([Homebrew](https://brew.sh)) | `brew install gcc netcdf` |
-| **Ubuntu / Debian** | `sudo apt-get install gfortran libnetcdf-dev debhelper` |
+| **macOS** ([Homebrew](https://brew.sh)) | `brew install gcc netcdf gd` |
+| **Ubuntu / Debian** | `sudo apt-get install gfortran libnetcdf-dev libgd-dev debhelper` |
 | **Windows** | Install [RTools](https://cran.r-project.org/bin/windows/Rtools/) for your R version |
 
 To check whether all build dependencies are present:

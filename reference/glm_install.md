@@ -10,7 +10,7 @@ after a GLM version upgrade).
 
 ``` r
 glm_install(
-  repo = GLM_DEFAULT_REPO,
+  repo = glm_default_repo,
   ref = "HEAD",
   no_gui = TRUE,
   jobs = 1L,
@@ -31,7 +31,7 @@ glm_install(
 
   What to check out after cloning. Accepts:
 
-  - `"HEAD"` (default) — tip of the default branch
+  - `"HEAD"` (default) – tip of the default branch
 
   - a branch name, e.g. `"develop"`
 
@@ -67,15 +67,15 @@ Invisibly returns the path to the installed GLM executable.
 
 ### System requirements
 
-**macOS** — install via Homebrew:
+**macOS** – install via Homebrew:
 
     brew install gcc netcdf
 
-**Linux (Ubuntu/Debian)** — install via apt:
+**Linux (Ubuntu/Debian)** – install via apt:
 
-    sudo apt-get install gfortran libnetcdf-dev
+    sudo apt-get install gfortran libnetcdf-dev debhelper
 
-**Windows** — install
+**Windows** – install
 [RTools](https://cran.r-project.org/bin/windows/Rtools/) for your R
 version (provides `gfortran`, `make`, and NetCDF libraries).
 

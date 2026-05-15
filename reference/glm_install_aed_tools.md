@@ -32,7 +32,7 @@ glm_install_aed_tools(
   Branch or tag to check out inside the `GLM/` sub-repository after
   fetching sources. Accepts:
 
-  - `"HEAD"` (default) — whatever branch `fetch_sources.sh` leaves
+  - `"HEAD"` (default) – whatever branch `fetch_sources.sh` leaves
     checked out
 
   - a branch name, e.g. `"v4alpha"`
@@ -74,7 +74,7 @@ Invisibly returns the path to the installed GLM executable.
 
 Same as
 [`glm_install()`](https://flare-forecast.github.io/GLMAEDr/reference/glm_install.md)
-— see
+– see
 [`?glm_install`](https://flare-forecast.github.io/GLMAEDr/reference/glm_install.md)
 for details.
 
