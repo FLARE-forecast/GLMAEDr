@@ -45,17 +45,13 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y gfortran libnetcdf-dev libgd-dev debhelper
 
-      - name: Install Windows build dependencies
-        if: runner.os == 'Windows'
-        run: pacman -Sy --noconfirm mingw-w64-ucrt-x86_64-gd
-        shell: bash
-
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck, local::.
           needs: check
 
       - name: Compile and install GLM
+        if: runner.os != 'Windows'
         run: Rscript -e "GLMAEDr::glm_install(quiet = FALSE)"
         shell: bash
 
